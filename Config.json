@@ -1,0 +1,14 @@
+﻿{
+  // DISCORD
+  "BotName": "<NICK>",
+  "BotPrefix": "-",
+  "BotToken": "<TOKEN>",
+  "ChannelId": 0,
+  "EmoteGood": "tick",
+  "EmoteBad": "❌",
+
+  // DATABASE
+  "ConnectionStrings": {
+    "Database": "<DATABASE>"
+  }
+}
