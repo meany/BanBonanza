@@ -35,8 +35,8 @@ namespace dm.BanBonanza
             {
                 var builder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("Config.Bot.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile("Config.Bot.Local.json", optional: true, reloadOnChange: true);
+                    .AddJsonFile("Config.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile("Config.Local.json", optional: true, reloadOnChange: true);
 
                 configuration = builder.Build();
 

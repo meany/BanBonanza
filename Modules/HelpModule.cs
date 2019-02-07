@@ -33,7 +33,7 @@ namespace dm.BanBonanza.Modules
                     AddHelp(cmd, ref output);
                     output.WithAuthor(author =>
                     {
-                        author.WithName($"Exchange v{Utils.GetVersion()}");
+                        author.WithName($"BanBonanza v{Utils.GetVersion()}");
                     }).WithFooter(footer =>
                     {
                         footer.WithText($"Use '{config.BotPrefix}help <command>' to get help with a specifc command")

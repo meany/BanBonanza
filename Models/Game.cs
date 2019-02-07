@@ -14,12 +14,9 @@ namespace dm.BanBonanza.Models
         public int MaxGuesses { get; set; }
         public DateTime End { get; set; }
         public User Winner { get; set; }
-        public int WinnerId { get; set; }
         public int Reward { get; set; }
 
         public List<Guess> Guesses { get; set; }
-
-        public Session Season { get; set; }
-        public int SeasonId { get; set; }
+        public Session Session { get; set; }
     }
 }

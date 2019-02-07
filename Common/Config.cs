@@ -7,6 +7,7 @@
         public string BotToken { get; set; }
 
         public ulong ChannelId { get; set; }
+        public ulong AdminRoleId { get; set; }
         public string EmoteGood { get; set; }
         public string EmoteBad { get; set; }
     }

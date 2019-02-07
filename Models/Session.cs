@@ -8,7 +8,6 @@ namespace dm.BanBonanza.Models
         public int SessionId { get; set; }
         public DateTime Start { get; set; }
         public User StartedBy { get; set; }
-        public int StartedById { get; set; }
         public int Pot { get; set; }
         public string Name { get; set; }
         public decimal Difficulty { get; set; }

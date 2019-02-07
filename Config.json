@@ -4,6 +4,7 @@
   "BotPrefix": "-",
   "BotToken": "<TOKEN>",
   "ChannelId": 0,
+  "AdminRoleId": 0,
   "EmoteGood": "tick",
   "EmoteBad": "❌",
 

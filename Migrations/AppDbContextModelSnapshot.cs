@@ -37,20 +37,18 @@ namespace dm.BanBonanza.Migrations
 
                     b.Property<int>("Reward");
 
-                    b.Property<int>("SeasonId");
+                    b.Property<int?>("SessionId");
 
                     b.Property<DateTime>("Start");
 
                     b.Property<int>("Upper");
 
-                    b.Property<int>("WinnerId");
-
-                    b.Property<decimal>("WinnerUserId")
+                    b.Property<decimal?>("WinnerUserId")
                         .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
 
                     b.HasKey("GameId");
 
-                    b.HasIndex("SeasonId");
+                    b.HasIndex("SessionId");
 
                     b.HasIndex("WinnerUserId");
 
@@ -74,16 +72,14 @@ namespace dm.BanBonanza.Migrations
 
                     b.Property<int>("Response");
 
-                    b.Property<int>("UserId");
-
-                    b.Property<decimal?>("UserId1")
+                    b.Property<decimal?>("UserId")
                         .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
 
                     b.HasKey("GuessId");
 
                     b.HasIndex("GameId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Guesses");
                 });
@@ -104,8 +100,6 @@ namespace dm.BanBonanza.Migrations
 
                     b.Property<DateTime>("Start");
 
-                    b.Property<int>("StartedById");
-
                     b.Property<decimal?>("StartedByUserId")
                         .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
 
@@ -113,13 +107,12 @@ namespace dm.BanBonanza.Migrations
 
                     b.HasIndex("StartedByUserId");
 
-                    b.ToTable("Seasons");
+                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("dm.BanBonanza.Models.User", b =>
                 {
                     b.Property<decimal>("UserId")
-                        .ValueGeneratedOnAdd()
                         .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
 
                     b.Property<bool>("IsAlt");
@@ -133,26 +126,24 @@ namespace dm.BanBonanza.Migrations
 
             modelBuilder.Entity("dm.BanBonanza.Models.Game", b =>
                 {
-                    b.HasOne("dm.BanBonanza.Models.Session", "Season")
+                    b.HasOne("dm.BanBonanza.Models.Session", "Session")
                         .WithMany("Games")
-                        .HasForeignKey("SeasonId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SessionId");
 
                     b.HasOne("dm.BanBonanza.Models.User", "Winner")
                         .WithMany("GamesWon")
-                        .HasForeignKey("WinnerUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("WinnerUserId");
                 });
 
             modelBuilder.Entity("dm.BanBonanza.Models.Guess", b =>
                 {
-                    b.HasOne("dm.BanBonanza.Models.Game")
+                    b.HasOne("dm.BanBonanza.Models.Game", "Game")
                         .WithMany("Guesses")
                         .HasForeignKey("GameId");
 
                     b.HasOne("dm.BanBonanza.Models.User", "User")
                         .WithMany("Guesses")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("dm.BanBonanza.Models.Session", b =>

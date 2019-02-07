@@ -13,7 +13,7 @@ namespace dm.BanBonanza.Data
     {
         public DbSet<Game> Games { get; set; }
         public DbSet<Guess> Guesses { get; set; }
-        public DbSet<Session> Seasons { get; set; }
+        public DbSet<Session> Sessions { get; set; }
         public DbSet<User> Users { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
