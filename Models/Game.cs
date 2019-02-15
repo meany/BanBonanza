@@ -13,8 +13,10 @@ namespace dm.BanBonanza.Models
         public decimal Difficulty { get; set; }
         public int MaxGuesses { get; set; }
         public DateTime End { get; set; }
-        public User Winner { get; set; }
         public int Reward { get; set; }
+
+        public int WinnerId { get; set; }
+        public User Winner { get; set; }
 
         public List<Guess> Guesses { get; set; }
         public Session Session { get; set; }

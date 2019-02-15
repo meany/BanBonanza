@@ -28,21 +28,21 @@ namespace dm.BanBonanza.Migrations
                     SessionId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Start = table.Column<DateTime>(nullable: false),
-                    StartedByUserId = table.Column<decimal>(nullable: true),
                     Pot = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Difficulty = table.Column<decimal>(nullable: false),
-                    End = table.Column<DateTime>(nullable: false)
+                    End = table.Column<DateTime>(nullable: false),
+                    StartedById = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Sessions", x => x.SessionId);
                     table.ForeignKey(
-                        name: "FK_Sessions_Users_StartedByUserId",
-                        column: x => x.StartedByUserId,
+                        name: "FK_Sessions_Users_StartedById",
+                        column: x => x.StartedById,
                         principalTable: "Users",
                         principalColumn: "UserId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,8 +58,9 @@ namespace dm.BanBonanza.Migrations
                     Difficulty = table.Column<decimal>(nullable: false),
                     MaxGuesses = table.Column<int>(nullable: false),
                     End = table.Column<DateTime>(nullable: false),
-                    WinnerUserId = table.Column<decimal>(nullable: true),
                     Reward = table.Column<int>(nullable: false),
+                    WinnerId = table.Column<int>(nullable: false),
+                    WinnerUserId = table.Column<decimal>(nullable: false),
                     SessionId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -76,7 +77,7 @@ namespace dm.BanBonanza.Migrations
                         column: x => x.WinnerUserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -87,9 +88,10 @@ namespace dm.BanBonanza.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Date = table.Column<DateTime>(nullable: false),
                     Number = table.Column<int>(nullable: false),
-                    UserId = table.Column<decimal>(nullable: true),
                     MessageId = table.Column<decimal>(nullable: false),
                     Response = table.Column<int>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
+                    UserId1 = table.Column<decimal>(nullable: true),
                     GameId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -102,8 +104,8 @@ namespace dm.BanBonanza.Migrations
                         principalColumn: "GameId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Guesses_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Guesses_Users_UserId1",
+                        column: x => x.UserId1,
                         principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
@@ -125,14 +127,14 @@ namespace dm.BanBonanza.Migrations
                 column: "GameId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Guesses_UserId",
+                name: "IX_Guesses_UserId1",
                 table: "Guesses",
-                column: "UserId");
+                column: "UserId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sessions_StartedByUserId",
+                name: "IX_Sessions_StartedById",
                 table: "Sessions",
-                column: "StartedByUserId");
+                column: "StartedById");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

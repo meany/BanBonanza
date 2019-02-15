@@ -10,7 +10,7 @@ namespace dm.BanBonanza
     public static class Utils
     {
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static string GetCurrentClassAndMethod()
+        internal static string GetCurrentClassAndMethod()
         {
             StackTrace st = new StackTrace();
             StackFrame sf = st.GetFrame(1);
@@ -19,19 +19,19 @@ namespace dm.BanBonanza
 
         [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
         static extern bool CheckRemoteDebuggerPresent(IntPtr hProcess, ref bool isDebuggerPresent);
-        public static bool IsDebug()
+        internal static bool IsDebug()
         {
             bool b = false;
             CheckRemoteDebuggerPresent(Process.GetCurrentProcess().Handle, ref b);
             return b;
         }
 
-        public static bool IsWindows()
+        internal static bool IsWindows()
         {
             return RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         }
 
-        public static string ConvertToCompoundDuration(int Seconds, bool onlyOneUnit = true)
+        internal static string ConvertToCompoundDuration(int Seconds, bool onlyOneUnit = true)
         {
             bool neg = false;
             if (Seconds < 0)
@@ -56,7 +56,7 @@ namespace dm.BanBonanza
             return (neg) ? $"-{r}" : r;
         }
 
-        public static string GetVersion()
+        internal static string GetVersion()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
@@ -66,7 +66,7 @@ namespace dm.BanBonanza
             return $"{patchV} (build {buildV})";
         }
 
-        public static bool StartDotNetProcess(string directory, string fileName, string[] args)
+        internal static bool StartDotNetProcess(string directory, string fileName, string[] args)
         {
             var proc = new Process();
             proc.StartInfo.WorkingDirectory = directory;

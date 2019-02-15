@@ -6,26 +6,15 @@ using System.Threading.Tasks;
 
 namespace dm.BanBonanza
 {
-    public static class UserUtils
+    public static class UserHelper
     {
-        public static async Task<User> GetOrUpdateUser(AppDbContext db, Config config, ulong userId, string userName)
+        internal static async Task<User> GetUser(AppDbContext db, Config config, ulong userId, string userName)
         {
             var item = await GetUser(db, userId).ConfigureAwait(false);
-
             if (item == null)
             {
                 item = await CreateUser(db, config, userId, userName).ConfigureAwait(false);
             }
-            else
-            {
-                if (item.Name != userName)
-                {
-                    item.Name = userName;
-                    db.Users.Update(item);
-                    await db.SaveChangesAsync().ConfigureAwait(false);
-                }
-            }
-
             return item;
         }
 
@@ -49,7 +38,6 @@ namespace dm.BanBonanza
                 Name = userName,
             };
             db.Users.Add(user);
-
             await db.SaveChangesAsync().ConfigureAwait(false);
             return await GetUser(db, userId).ConfigureAwait(false);
         }

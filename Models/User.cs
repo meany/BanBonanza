@@ -12,7 +12,9 @@ namespace dm.BanBonanza.Models
         public string Name { get; set; }
         public bool IsAlt { get; set; }
 
+        [InverseProperty("StartedBy")]
         public List<Session> SessionsStarted { get; set; }
+        [InverseProperty("Winner")]
         public List<Game> GamesWon { get; set; }
         public List<Guess> Guesses { get; set; }
     }

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using dm.BanBonanza.Data;
+using System;
+using System.Threading.Tasks;
 
 namespace dm.BanBonanza
 {
@@ -32,14 +32,27 @@ namespace dm.BanBonanza
                 return;
             }
 
+            if (message.Channel.Id != config.ChannelId && !(message.Channel is IDMChannel))
+            {
+                return;
+            }
+
             int argPos = 0;
             var context = new CommandContext(client, message);
+
+            if (message.Channel.Id == config.ChannelId && await GameHelper.SessionStarted(db).ConfigureAwait(false))
+            {
+                // TODO: parse guess
+            }
 
             if (message.HasStringPrefix(config.BotPrefix, ref argPos))
             {
                 var result = await commands.ExecuteAsync(context, argPos, services).ConfigureAwait(false);
                 if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
+                {
                     await context.Channel.SendMessageAsync(result.ErrorReason).ConfigureAwait(false);
+                }
+
                 return;
             }
         }
@@ -57,13 +70,13 @@ namespace dm.BanBonanza
             var chan = (ITextChannel)client.GetChannel(config.ChannelId);
             if (chan != null)
             {
-                //await chan.SendMessageAsync($"NOS Exchange started at {DateTime.Now.ToDate()}").ConfigureAwait(false);
+                //
             }
         }
 
-        //public async Task HandleReaction(Cacheable<IUserMessage, ulong> msg, ISocketMessageChannel channel, SocketReaction reaction)
-        //{
-        //    return;
-        //}
+        public async Task HandleReaction(Cacheable<IUserMessage, ulong> msg, ISocketMessageChannel channel, SocketReaction reaction)
+        {
+            return;
+        }
     }
 }

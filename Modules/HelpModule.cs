@@ -1,6 +1,8 @@
 ﻿using Discord;
 using Discord.Commands;
 using Microsoft.Extensions.Options;
+using NLog;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,6 +12,7 @@ namespace dm.BanBonanza.Modules
     {
         private readonly Config config;
         private readonly CommandService commands;
+        private static Logger log = LogManager.GetCurrentClassLogger();
 
         public HelpModule(IOptions<Config> config, CommandService commands)
         {
@@ -24,39 +27,47 @@ namespace dm.BanBonanza.Modules
             "To review command usage and remarks, use the 'help' command along with the full 'name' of the command (not an alias).\n")]
         public async Task Help(string command = "")
         {
-            var output = new EmbedBuilder()
-                .WithColor(Color.INFO);
-            if (command == string.Empty)
+            try
             {
-                foreach (var cmd in commands.Commands)
+                var output = new EmbedBuilder()
+                    .WithColor(Color.INFO);
+                if (command == string.Empty)
                 {
-                    AddHelp(cmd, ref output);
-                    output.WithAuthor(author =>
+                    foreach (var cmd in commands.Commands)
                     {
-                        author.WithName($"BanBonanza v{Utils.GetVersion()}");
-                    }).WithFooter(footer =>
-                    {
-                        footer.WithText($"Use '{config.BotPrefix}help <command>' to get help with a specifc command")
-                            .WithIconUrl(Asset.INFO);
-                    });
+                        AddHelp(cmd, ref output);
+                        output.WithAuthor(author =>
+                        {
+                            author.WithName($"BanBonanza v{Utils.GetVersion()}");
+                        }).WithFooter(footer =>
+                        {
+                            footer.WithText($"Use '{config.BotPrefix}help <command>' to get help with a specifc command")
+                                .WithIconUrl(Asset.INFO);
+                        });
+                    }
                 }
-            }
-            else
-            {
-                var cmd = commands.Commands.FirstOrDefault(m => m.Name.ToLower() == command.ToLower());
-                if (cmd == null)
+                else
                 {
-                    return;
+                    var cmd = commands.Commands.FirstOrDefault(m => m.Name.ToLower() == command.ToLower());
+                    if (cmd == null)
+                    {
+                        return;
+                    }
+
+                    output.AddField($"Command: **{cmd.Aliases.FirstOrDefault()}**",
+                        $"{GetParams(cmd)}\n" +
+                        $"**Summary**: {cmd.Summary}\n" +
+                        $"**Remarks**: {cmd.Remarks}" +
+                        $"{GetAliases(cmd)}");
                 }
 
-                output.AddField($"Command: **{cmd.Aliases.FirstOrDefault()}**",
-                    $"{GetParams(cmd)}\n" +
-                    $"**Summary**: {cmd.Summary}\n" +
-                    $"**Remarks**: {cmd.Remarks}" +
-                    $"{GetAliases(cmd)}");
+                await DiscordHelper.ReplyDMAsync(Context, output).ConfigureAwait(false);
             }
-
-            await Discord.ReplyDMAsync(Context, output).ConfigureAwait(false);
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                throw;
+            }
         }
 
         private void AddHelp(CommandInfo cmd, ref EmbedBuilder output)

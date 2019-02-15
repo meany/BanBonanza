@@ -13,7 +13,7 @@
 
     public static class Color
     {
-        public static readonly uint BOT = 0x5990ff;
+        public static readonly uint BOT = 0xff4444;
         public static readonly uint CLOCK = 0x9d9d9d;
         public static readonly uint ERROR = 0xf05228;
         public static readonly uint INFO = 0x5990ff;

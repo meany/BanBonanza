@@ -1,4 +1,7 @@
-﻿dotnet ef migrations add init
+
+dotnet ef database update 0
+dotnet ef migrations remove
+dotnet ef migrations add init
 dotnet ef database update
 
-dotnet ef migrations script --idempotent --output "script.sql"
+REM dotnet ef migrations script --idempotent --output "script.sql"

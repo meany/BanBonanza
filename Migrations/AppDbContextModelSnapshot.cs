@@ -43,7 +43,9 @@ namespace dm.BanBonanza.Migrations
 
                     b.Property<int>("Upper");
 
-                    b.Property<decimal?>("WinnerUserId")
+                    b.Property<int>("WinnerId");
+
+                    b.Property<decimal>("WinnerUserId")
                         .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
 
                     b.HasKey("GameId");
@@ -72,14 +74,16 @@ namespace dm.BanBonanza.Migrations
 
                     b.Property<int>("Response");
 
-                    b.Property<decimal?>("UserId")
+                    b.Property<int>("UserId");
+
+                    b.Property<decimal?>("UserId1")
                         .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
 
                     b.HasKey("GuessId");
 
                     b.HasIndex("GameId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Guesses");
                 });
@@ -100,12 +104,12 @@ namespace dm.BanBonanza.Migrations
 
                     b.Property<DateTime>("Start");
 
-                    b.Property<decimal?>("StartedByUserId")
+                    b.Property<decimal>("StartedById")
                         .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
 
                     b.HasKey("SessionId");
 
-                    b.HasIndex("StartedByUserId");
+                    b.HasIndex("StartedById");
 
                     b.ToTable("Sessions");
                 });
@@ -132,7 +136,8 @@ namespace dm.BanBonanza.Migrations
 
                     b.HasOne("dm.BanBonanza.Models.User", "Winner")
                         .WithMany("GamesWon")
-                        .HasForeignKey("WinnerUserId");
+                        .HasForeignKey("WinnerUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("dm.BanBonanza.Models.Guess", b =>
@@ -143,14 +148,15 @@ namespace dm.BanBonanza.Migrations
 
                     b.HasOne("dm.BanBonanza.Models.User", "User")
                         .WithMany("Guesses")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("dm.BanBonanza.Models.Session", b =>
                 {
                     b.HasOne("dm.BanBonanza.Models.User", "StartedBy")
                         .WithMany("SessionsStarted")
-                        .HasForeignKey("StartedByUserId");
+                        .HasForeignKey("StartedById")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }
